@@ -7,6 +7,8 @@ const host = '127.0.0.1';
 const port = '8080';
 const server = `${protocol}://${host}:${port}`;
 
+const app = require('./server');
+
 (async () => {
   // get a city by tag ("excepteurus")
   let result = await fetch(`${server}/cities-by-tag?tag=excepteurus&isActive=true`);
@@ -50,7 +52,7 @@ const server = `${protocol}://${host}:${port}`;
   // result we expect to get a url that can be polled for the final result
   result = await fetch(`${server}/area?from=${city.guid}&distance=250`, {
     headers: { 'Authorization': 'bearer dGhlc2VjcmV0dG9rZW4=' },
-    timeout: 25
+    timeout: 5000
   });
 
   // so far so good
@@ -60,7 +62,7 @@ const server = `${protocol}://${host}:${port}`;
   assert.strictEqual(body.resultsUrl, `${server}/area-result/2152f96f-50c7-4d76-9e18-f7033bd14428`);
 
   let status;
-  do
+  do 
   {
     result = await fetch(body.resultsUrl, {
       headers: { 'Authorization': 'bearer dGhlc2VjcmV0dG9rZW4=' }
